@@ -19,6 +19,10 @@
             --border-radius: 12px;
             --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             --transition: all 0.3s ease;
+            --food-veg: #27ae60;
+            --food-protein: #e74c3c;
+            --food-carb: #f39c12;
+            --food-dairy: #3498db;
         }
         
         * {
@@ -216,6 +220,62 @@
         .overweight { color: #f39c12; background: rgba(243, 156, 18, 0.1); }
         .obese { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
         
+        /* 食物替换区域 */
+        .food-replace {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .food-replace-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .food-replace-title i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        .replace-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .replace-option {
+            flex: 1;
+            min-width: 120px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .replace-option:hover {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.05);
+        }
+        
+        .replace-option.active {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.1);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .replace-option i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
         /* 膳食计划 */
         .meal-plan {
             display: flex;
@@ -275,13 +335,21 @@
         .food-name i {
             margin-right: 8px;
             width: 20px;
-            color: var(--gray);
         }
         
+        .food-veg i { color: var(--food-veg); }
+        .food-protein i { color: var(--food-protein); }
+        .food-carb i { color: var(--food-carb); }
+        .food-dairy i { color: var(--food-dairy); }
+        
         .food-amount {
-            color: var(--primary);
             font-weight: 600;
         }
+        
+        .food-veg .food-amount { color: var(--food-veg); }
+        .food-protein .food-amount { color: var(--food-protein); }
+        .food-carb .food-amount { color: var(--food-carb); }
+        .food-dairy .food-amount { color: var(--food-dairy); }
         
         .nutrition-summary {
             margin-top: 12px;
@@ -297,6 +365,35 @@
             margin: 20px 0;
             height: 250px;
             position: relative;
+        }
+        
+        .charts-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .chart-box {
+            flex: 1;
+            min-width: 100%;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-box {
+                min-width: calc(50% - 15px);
+            }
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--dark);
         }
         
         /* 注意事项 */
@@ -376,6 +473,10 @@
             
             .meal-card {
                 padding: 15px;
+            }
+            
+            .chart-box {
+                padding: 10px;
             }
         }
         
@@ -488,36 +589,64 @@
             
             <div id="bmiResult" class="bmi-result"></div>
             
+            <div class="food-replace">
+                <div class="food-replace-title">
+                    <i class="fas fa-exchange-alt"></i> 替换碳水化合物来源
+                </div>
+                <div class="replace-options">
+                    <div class="replace-option active" data-food="rice">
+                        <i class="fas fa-bread-slice"></i>
+                        <div>米饭</div>
+                    </div>
+                    <div class="replace-option" data-food="potato">
+                        <i class="fas fa-potato"></i>
+                        <div>土豆</div>
+                    </div>
+                    <div class="replace-option" data-food="sweet_potato">
+                        <i class="fas fa-seedling"></i>
+                        <div>红薯</div>
+                    </div>
+                    <div class="replace-option" data-food="oats">
+                        <i class="fas fa-wheat-awn"></i>
+                        <div>燕麦</div>
+                    </div>
+                    <div class="replace-option" data-food="whole_wheat">
+                        <i class="fas fa-bread-slice"></i>
+                        <div>全麦面包</div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="meal-plan">
                 <div class="meal-card">
                     <div class="meal-time">
                         <i class="fas fa-sun"></i> 第一餐：上午 11:00
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-veg">
                         <span class="food-name">
                             <i class="fas fa-carrot"></i> 蔬菜
                         </span>
                         <span class="food-amount" id="veg1">250-300克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-protein">
                         <span class="food-name">
                             <i class="fas fa-drumstick-bite"></i> 猪肉 (瘦肉)
                         </span>
                         <span class="food-amount" id="pork1">80-100克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-protein">
                         <span class="food-name">
                             <i class="fas fa-egg"></i> 鸡蛋
                         </span>
                         <span class="food-amount" id="egg1">1-2个</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-carb">
                         <span class="food-name">
-                            <i class="fas fa-bread-slice"></i> 米饭 (熟重)
+                            <i class="fas fa-bread-slice food-carb"></i> <span id="carb-name1">米饭</span> (熟重)
                         </span>
-                        <span class="food-amount" id="rice1">100克</span>
+                        <span class="food-amount" id="carb1">100克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-dairy">
                         <span class="food-name">
                             <i class="fas fa-wine-bottle"></i> 牛奶
                         </span>
@@ -532,31 +661,31 @@
                     <div class="meal-time">
                         <i class="fas fa-moon"></i> 第二餐：晚上 19:00
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-veg">
                         <span class="food-name">
                             <i class="fas fa-carrot"></i> 蔬菜
                         </span>
                         <span class="food-amount" id="veg2">300-350克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-protein">
                         <span class="food-name">
                             <i class="fas fa-drumstick-bite"></i> 猪肉 (瘦肉)
                         </span>
                         <span class="food-amount" id="pork2">100-120克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-protein">
                         <span class="food-name">
                             <i class="fas fa-egg"></i> 鸡蛋
                         </span>
                         <span class="food-amount" id="egg2">1个</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-carb">
                         <span class="food-name">
-                            <i class="fas fa-bread-slice"></i> 米饭 (熟重)
+                            <i class="fas fa-bread-slice"></i> <span id="carb-name2">米饭</span> (熟重)
                         </span>
-                        <span class="food-amount" id="rice2">80克</span>
+                        <span class="food-amount" id="carb2">80克</span>
                     </div>
-                    <div class="food-item">
+                    <div class="food-item food-dairy">
                         <span class="food-name">
                             <i class="fas fa-wine-bottle"></i> 牛奶
                         </span>
@@ -568,8 +697,19 @@
                 </div>
             </div>
             
-            <div class="chart-container">
-                <canvas id="nutritionChart"></canvas>
+            <div class="charts-row">
+                <div class="chart-box">
+                    <div class="chart-title">每日营养素比例</div>
+                    <div class="chart-container">
+                        <canvas id="nutritionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-title">每日热量分布</div>
+                    <div class="chart-container">
+                        <canvas id="caloriesChart"></canvas>
+                    </div>
+                </div>
             </div>
             
             <div class="notes">
@@ -610,6 +750,19 @@
             const targetError = document.getElementById('target-error');
             const ageError = document.getElementById('age-error');
             
+            // 食物替换元素
+            const replaceOptions = document.querySelectorAll('.replace-option');
+            let selectedCarbFood = 'rice';
+            
+            // 食物数据库
+            const carbFoods = {
+                rice: { name: "米饭", ratio: 1.0, icon: "fas fa-bread-slice" },
+                potato: { name: "土豆", ratio: 1.5, icon: "fas fa-potato" },
+                sweet_potato: { name: "红薯", ratio: 1.3, icon: "fas fa-seedling" },
+                oats: { name: "燕麦", ratio: 0.8, icon: "fas fa-wheat-awn" },
+                whole_wheat: { name: "全麦面包", ratio: 0.7, icon: "fas fa-bread-slice" }
+            };
+            
             // 初始化图表
             const ctx = document.getElementById('nutritionChart').getContext('2d');
             const nutritionChart = new Chart(ctx, {
@@ -639,16 +792,44 @@
                                 padding: 20
                             }
                         },
-                        title: {
-                            display: true,
-                            text: '每日营养素比例',
-                            font: {
-                                size: 16,
-                                weight: 'bold'
+                        tooltip: {
+                            bodyFont: {
+                                size: 14
                             },
-                            padding: {
-                                top: 10,
-                                bottom: 20
+                            titleFont: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 热量图表
+            const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
+            const caloriesChart = new Chart(caloriesCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['早餐', '晚餐'],
+                    datasets: [{
+                        data: [500, 600],
+                        backgroundColor: [
+                            '#3498db',
+                            '#2ecc71'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                padding: 20
                             }
                         },
                         tooltip: {
@@ -661,6 +842,46 @@
                         }
                     }
                 }
+            });
+            
+            // 食物替换功能
+            replaceOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有激活状态
+                    replaceOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // 添加当前激活状态
+                    this.classList.add('active');
+                    
+                    // 更新选择的食物
+                    selectedCarbFood = this.dataset.food;
+                    const foodData = carbFoods[selectedCarbFood];
+                    
+                    // 更新食物名称
+                    document.getElementById('carb-name1').textContent = foodData.name;
+                    document.getElementById('carb-name2').textContent = foodData.name;
+                    
+                    // 更新食物图标
+                    document.querySelectorAll('.food-carb i').forEach(icon => {
+                        icon.className = foodData.icon;
+                    });
+                    
+                    // 更新食物量（根据比例调整）
+                    const intensity = parseFloat(document.getElementById('activity').value) / 1.55;
+                    const carb1 = document.getElementById('carb1');
+                    const carb2 = document.getElementById('carb2');
+                    
+                    if (carb1.dataset.originalValue && carb2.dataset.originalValue) {
+                        const originalValue1 = parseFloat(carb1.dataset.originalValue);
+                        const originalValue2 = parseFloat(carb2.dataset.originalValue);
+                        
+                        const newValue1 = Math.round(originalValue1 * foodData.ratio * intensity);
+                        const newValue2 = Math.round(originalValue2 * foodData.ratio * intensity);
+                        
+                        carb1.textContent = `${newValue1}克`;
+                        carb2.textContent = `${newValue2}克`;
+                    }
+                });
             });
             
             calculateBtn.addEventListener('click', function() {
@@ -733,16 +954,51 @@
                     
                     // 根据目标体重调整食物量（示例逻辑）
                     const weightDiff = weight - target;
-                    const intensity = weightDiff > 10 ? 1.2 : 1.1;
+                    const intensity = activity / 1.55; // 基于中等活动水平
                     
                     // 更新食物量显示
-                    document.getElementById('veg1').textContent = `${Math.round(250 * intensity)}-${Math.round(300 * intensity)}克`;
-                    document.getElementById('pork1').textContent = `${Math.round(80 * intensity)}-${Math.round(100 * intensity)}克`;
-                    document.getElementById('rice1').textContent = `${Math.round(100 * intensity)}克`;
+                    const veg1 = document.getElementById('veg1');
+                    const pork1 = document.getElementById('pork1');
+                    const egg1 = document.getElementById('egg1');
+                    const carb1 = document.getElementById('carb1');
+                    const milk1 = document.getElementById('milk1');
                     
-                    document.getElementById('veg2').textContent = `${Math.round(300 * intensity)}-${Math.round(350 * intensity)}克`;
-                    document.getElementById('pork2').textContent = `${Math.round(100 * intensity)}-${Math.round(120 * intensity)}克`;
-                    document.getElementById('rice2').textContent = `${Math.round(80 * intensity)}克`;
+                    const veg2 = document.getElementById('veg2');
+                    const pork2 = document.getElementById('pork2');
+                    const egg2 = document.getElementById('egg2');
+                    const carb2 = document.getElementById('carb2');
+                    const milk2 = document.getElementById('milk2');
+                    
+                    // 存储原始碳水化合物值（米饭基准）
+                    const carbBase1 = 100;
+                    const carbBase2 = 80;
+                    carb1.dataset.originalValue = carbBase1;
+                    carb2.dataset.originalValue = carbBase2;
+                    
+                    // 获取当前选择的碳水化合物食物
+                    const foodData = carbFoods[selectedCarbFood];
+                    
+                    // 更新食物名称
+                    document.getElementById('carb-name1').textContent = foodData.name;
+                    document.getElementById('carb-name2').textContent = foodData.name;
+                    
+                    // 更新食物图标
+                    document.querySelectorAll('.food-carb i').forEach(icon => {
+                        icon.className = foodData.icon;
+                    });
+                    
+                    // 更新食物量
+                    veg1.textContent = `${Math.round(250 * intensity)}-${Math.round(300 * intensity)}克`;
+                    pork1.textContent = `${Math.round(80 * intensity)}-${Math.round(100 * intensity)}克`;
+                    egg1.textContent = `${Math.round(1 * intensity)}-${Math.round(2 * intensity)}个`;
+                    carb1.textContent = `${Math.round(carbBase1 * foodData.ratio * intensity)}克`;
+                    milk1.textContent = `${Math.round(200 * intensity)}毫升`;
+                    
+                    veg2.textContent = `${Math.round(300 * intensity)}-${Math.round(350 * intensity)}克`;
+                    pork2.textContent = `${Math.round(100 * intensity)}-${Math.round(120 * intensity)}克`;
+                    egg2.textContent = `${Math.round(1 * intensity)}个`;
+                    carb2.textContent = `${Math.round(carbBase2 * foodData.ratio * intensity)}克`;
+                    milk2.textContent = `${Math.round(150 * intensity)}毫升`;
                     
                     // 更新图表数据
                     nutritionChart.data.datasets[0].data = [
@@ -751,6 +1007,13 @@
                         Math.round(20 * intensity)
                     ];
                     nutritionChart.update();
+                    
+                    // 更新热量图表
+                    caloriesChart.data.datasets[0].data = [
+                        Math.round(500 * intensity),
+                        Math.round(600 * intensity)
+                    ];
+                    caloriesChart.update();
                     
                     // 显示结果区域
                     resultSection.style.display = 'block';
